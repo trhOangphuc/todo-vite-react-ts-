@@ -4,54 +4,55 @@ import { TodoItem } from "../components/TodoItem";
 import { useRef  } from "react";
 import { toast, ToastContainer } from "react-toastify"; // Import thư viện để hiển thị thông báo
 import "react-toastify/dist/ReactToastify.css"; // Import CSS cho Toastify
+import withLogger from "../hoc/withLogger";
 
-const TodoPage = () => {
-  const { value, onChange, reset } = useInput("");
-  const [todos, setTodos] = useState<string[]>([]);
-  const [itemCount, setItemCount] = useState<number>(0); // State để lưu số lượng item
-  const [checkedStatus, setCheckedStatus] =useState<boolean[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
-  
-  // 1. Lấy dữ liệu từ localStorage khi trang được mở lại
- useEffect(() => {
-  try {
-    const savedTodos = localStorage.getItem("todos");
-    if (savedTodos) {
-      const parsed = JSON.parse(savedTodos);
-      if (Array.isArray(parsed)) {
-        setTodos(parsed);
-        setItemCount(parsed.length);
-        setCheckedStatus(new Array(parsed.length).fill(false));
+  const TodoPage = () => {
+    const { value, onChange, reset } = useInput("");
+    const [todos, setTodos] = useState<string[]>([]);
+    const [itemCount, setItemCount] = useState<number>(0); // State để lưu số lượng item
+    const [checkedStatus, setCheckedStatus] =useState<boolean[]>([]);
+    const inputRef = useRef<HTMLInputElement>(null);
+    
+  // Lấy dữ liệu từ localStorage khi trang được mở lại
+  useEffect(() => {
+    try {
+      const savedTodos = localStorage.getItem("todos");
+      if (savedTodos) {
+        const parsed = JSON.parse(savedTodos);
+        if (Array.isArray(parsed)) {
+          setTodos(parsed);
+          setItemCount(parsed.length);
+          setCheckedStatus(new Array(parsed.length).fill(false));
+        }
+      } else {
+        //  Nếu localStorage không có gì thì reset rõ ràng
+        setTodos([]);
+        setItemCount(0);
       }
-    } else {
-      // ✅ Nếu localStorage không có gì thì reset rõ ràng
+    } catch (err) {
+      console.error("Lỗi đọc localStorage:", err);
       setTodos([]);
       setItemCount(0);
     }
-  } catch (err) {
-    console.error("Lỗi đọc localStorage:", err);
-    setTodos([]);
-    setItemCount(0);
-  }
-}, []);
+  }, []);
 
 
-  // 2. Mỗi khi todos thay đổi, lưu vào localStorage và cập nhật itemCount
+  // Mỗi khi todos thay đổi, lưu vào localStorage và cập nhật itemCount
   useEffect(() => {
     if (todos.length > 0) {
       localStorage.setItem("todos", JSON.stringify(todos)); // Lưu mảng todos vào localStorage
     }
     setItemCount(todos.length); // Cập nhật số lượng item mỗi khi todos thay đổi
   }, [todos]);
+  //16-46 sử dụng dữ liệu lưu vào localStorage để khi reload trang không bị mất dữ liệu đang có
 
-   // Khai báo useRef cho input
   const handleAddTodo = () => {
     if (value.trim()) {
       setCheckedStatus([...checkedStatus, false]);
       setTodos([...todos, value]);
-      reset(); // reset lại input sau khi thêm todo
+      reset(); 
       if (inputRef.current) {
-        inputRef.current.focus(); // đặt lại focus cho input
+        inputRef.current.focus(); 
       }
        toast.success("Thêm thành công !", { autoClose: 700 }); 
     }
@@ -62,19 +63,20 @@ const TodoPage = () => {
   };
 
   const handleDelete = (indexToRemove: number) => {
-  const newTodos = todos.filter((_, i) => i !== indexToRemove);
-  setTodos(newTodos);
-  // ✅ Cập nhật localStorage ngay sau khi xóa
-  localStorage.setItem("todos", JSON.stringify(newTodos));
-   toast.error("Đã xóa task !", { autoClose: 700 });
+    const newTodos = todos.filter((_, i) => i !== indexToRemove);
+    setTodos(newTodos);
+    
+    localStorage.setItem("todos", JSON.stringify(newTodos));
+    toast.error("Đã xóa task !", { autoClose: 700 });
 
-};
+  };
 
-    const handleCheckedChange = (index: number, checked: boolean) => {
+  // Sắp xếp lại list khi checked hoàn thành
+  const handleCheckedChange = (index: number, checked: boolean) => {
     const newCheckedStatus = [...checkedStatus];
-    newCheckedStatus[index] = checked; // Cập nhật trạng thái checkbox
+    newCheckedStatus[index] = checked; 
 
-    // Sắp xếp todos sao cho các todo đã được check sẽ xuống cuối
+
     const sortedTodos = [...todos];
     const sortedCheckedStatus = [...newCheckedStatus];
     
@@ -86,13 +88,11 @@ const TodoPage = () => {
 
     sortedCheckedStatus.sort((a, b) => (a === b ? 0 : a ? 1 : -1));
 
-    setTodos(sortedTodos); // Cập nhật lại danh sách todos
-    setCheckedStatus(sortedCheckedStatus); // Cập nhật lại trạng thái checkbox
+    setTodos(sortedTodos); 
+    setCheckedStatus(sortedCheckedStatus); 
   };
 
-   const CompletedCount = checkedStatus.filter((checked) => checked).length
-
-
+  const CompletedCount = checkedStatus.filter((checked) => checked).length
 
   return (
   
@@ -107,7 +107,6 @@ const TodoPage = () => {
       />
       <button onClick={handleAddTodo}>Add</button>
       <h2>Danh sách task</h2>
-
       <ol>
         {todos.map((todo, index) => (
           <li key={index}>
@@ -132,10 +131,9 @@ const TodoPage = () => {
         <strong>Task hoàn thành: {CompletedCount}/{itemCount} ✅</strong> 
       </div>
       </div>
-       {/* Thêm ToastContainer vào cuối cùng của component để hiển thị thông báo */}
-      <ToastContainer />
+      <ToastContainer /> {/*Hiển thị thông báo*/}
     </div>
   );
 };
-
-export default TodoPage;
+const TodoPageWithLogger = withLogger(TodoPage);
+export default TodoPageWithLogger;
