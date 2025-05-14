@@ -7,4 +7,5 @@ export default defineConfig({
   server: {
     port: 3000, // Đặt cổng bạn muốn sử dụng
   },
+  base: 'todo-vite-react-ts-',
 })
