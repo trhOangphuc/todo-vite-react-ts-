@@ -1,8 +1,10 @@
 import React from "react";
 import DeleteIcon from "../assets/image.png";
+import {Link} from "react-router-dom";
 
 interface Props {
   todo: string;
+  id: number;
   onDelete: () => void;
   isChecked : boolean;
   onCheckedChange: (checked: boolean) => void;
@@ -30,11 +32,13 @@ const TodoItem: React.FC<Props> = ({ todo, onDelete, isChecked, onCheckedChange 
       <tbody>
           <tr>
             <td>
+            <Link to={'/todo/${id}'} state={{todo, isChecked}}>
               {isChecked === true ? (
                 <del>{todo}</del>
               ) : (
                 <span>{todo}</span>
               )}
+            </Link>
             </td>
             <td>
               <input

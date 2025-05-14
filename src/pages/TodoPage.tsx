@@ -107,7 +107,7 @@ import withLogger from "../hoc/withLogger";
     <div className="page">
       <h1>Todo List</h1>
       <input
-        ref={inputRef} // gắn ref cho input
+        ref={inputRef}
         type="text"
         value={value}
         onChange={onChange}
@@ -129,6 +129,8 @@ import withLogger from "../hoc/withLogger";
       <ol>
         {todos.map((todo, index) => (
             <TodoItem
+              key={index}
+              id={index}
               todo={todo}
               onDelete={() => handleDelete(index)}
               isChecked={checkedStatus[index]}
