@@ -12,6 +12,8 @@ import withLogger from "../hoc/withLogger";
     const [itemCount, setItemCount] = useState<number>(0); // State để lưu số lượng item
     const [checkedStatus, setCheckedStatus] =useState<boolean[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const CompletedCount = checkedStatus.filter((checked) => checked).length // Số task hoàn thành
     
   // Lấy dữ liệu từ localStorage khi trang được mở lại
   useEffect(() => {
@@ -64,8 +66,14 @@ import withLogger from "../hoc/withLogger";
 
   const handleDelete = (indexToRemove: number) => {
     const newTodos = todos.filter((_, i) => i !== indexToRemove);
+    const updateTodos= [...todos];
+    const updatedChecked = [...checkedStatus];
+    updateTodos.splice(indexToRemove, 1);
+    updatedChecked.splice(indexToRemove, 1);
     setTodos(newTodos);
-    
+    setTodos(updateTodos);
+    setCheckedStatus(updatedChecked);
+
     localStorage.setItem("todos", JSON.stringify(newTodos));
     toast.error("Đã xóa task !", { autoClose: 700 });
 
@@ -92,11 +100,11 @@ import withLogger from "../hoc/withLogger";
     setCheckedStatus(sortedCheckedStatus); 
   };
 
-  const CompletedCount = checkedStatus.filter((checked) => checked).length
+  
 
   return (
   
-    <div style={{ padding: "20px" }}>
+    <div className="page">
       <h1>Todo List</h1>
       <input
         ref={inputRef} // gắn ref cho input
@@ -107,21 +115,8 @@ import withLogger from "../hoc/withLogger";
       />
       <button onClick={handleAddTodo}>Add</button>
       <h2>Danh sách task</h2>
-      <ol>
-        {todos.map((todo, index) => (
-          <li key={index}>
-            <TodoItem
-              todo={todo}
-              onDelete={() => handleDelete(index)}
-              isChecked={checkedStatus[index]}
-              onCheckedChange={(checked) => handleCheckedChange(index, checked)}
-            />
-          </li>
-        ))}
-      </ol>
-
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: "30px", gap: "300px" }}>
-      <div style={{ marginTop: "10px" }}>
+      <div style={{ marginTop: "10px", paddingLeft: "50px" }}>
         {itemCount !== 0
           ? (<strong>Số lượng task: {itemCount}</strong> )
           : <strong>không có task nào !</strong>
@@ -131,6 +126,16 @@ import withLogger from "../hoc/withLogger";
         <strong>Task hoàn thành: {CompletedCount}/{itemCount} ✅</strong> 
       </div>
       </div>
+      <ol>
+        {todos.map((todo, index) => (
+            <TodoItem
+              todo={todo}
+              onDelete={() => handleDelete(index)}
+              isChecked={checkedStatus[index]}
+              onCheckedChange={(checked) => handleCheckedChange(index, checked)}
+            />
+        ))}
+      </ol>
       <ToastContainer /> {/*Hiển thị thông báo*/}
     </div>
   );

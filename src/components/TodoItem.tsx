@@ -19,16 +19,40 @@ const TodoItem: React.FC<Props> = ({ todo, onDelete, isChecked, onCheckedChange 
   };
 
   return (
-    <ol>
-      {isChecked === true 
-        ? (<del>{todo}</del>)
-        : (<span>{todo}</span>)
-      }
-      <input className="checkbox" type="checkbox" checked={isChecked} onChange={handleChange} />
-      <button className="btnDel" onClick={handleClick} style={{ marginLeft: "50px"}}>
-        <img src={DeleteIcon} alt="Delete" style={{ width: "20px", height: "20px" }} />
-      </button>
-    </ol>
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Check</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td>
+              {isChecked === true ? (
+                <del>{todo}</del>
+              ) : (
+                <span>{todo}</span>
+              )}
+            </td>
+            <td>
+              <input
+                className="checkbox"
+                type="checkbox"
+                checked={isChecked}
+                onChange={handleChange}
+              />
+            </td>
+            <td>
+              <button className="btnDel" onClick={handleClick} style={{ marginLeft: "10px" }}>
+                <img src={DeleteIcon} alt="Delete" style={{ width: "30px", height: "30px" }} />
+              </button>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
   );
 };
 
