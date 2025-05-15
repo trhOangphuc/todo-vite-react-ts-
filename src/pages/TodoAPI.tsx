@@ -13,9 +13,9 @@ export default function TodoAPI() {
   useEffect(() => {
   fetch('https://api.emhoctoan.com/api/competitions?condition=%7B%7D&isMany=false')
     .then(res => res.json())
-    .then(json => {
-      console.log('Kết quả từ API:', json);
-      setData(json.data.competition); // ← Đúng mảng cần set
+    .then(data => {
+      console.log('Kết quả từ API:', data);
+      setData(data.data.competition); // ← Đúng mảng cần set
     })
     .catch(err => console.error('Lỗi khi fetch API:', err));
 }, []);
