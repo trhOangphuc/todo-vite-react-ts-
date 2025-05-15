@@ -27,7 +27,7 @@ export default function TodoAPI() {
         <p>Không có dữ liệu hoặc đang tải...</p>
       ) : (
         datas.map(item => (
-          <div key={item.id.$oid} style={{ border: "1px solid #ccc", marginBottom: "20px", padding: "10px" }}>
+          <div key={item.id.$oid} style={{ border: "1px solid #ccc", marginBottom: "20px", padding: "10px", background: "white"}}>
             <h3>{item.name}</h3>
             <p>{item.shortDescription}</p>
             <img src={item.logoImage} alt={item.name} style={{ width: "200px", height: "auto" }} />

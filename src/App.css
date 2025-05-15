@@ -77,7 +77,6 @@ span{
 
 /* Kiểu cho nút xóa */
 .btnDel :hover {
-  background: none;
   border: 2px solid red;
   cursor: pointer;
 }
