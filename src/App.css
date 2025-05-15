@@ -3,7 +3,9 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: #b8ece4;
 }
+
 body {
   background-color: #b8ece4;
 }
@@ -80,5 +82,9 @@ span{
   cursor: pointer;
 }
 
+.dataAPI {
+  text-align: left;
+  margin-left: 5%;
+}
 
 

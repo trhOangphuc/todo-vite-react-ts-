@@ -1,22 +1,37 @@
-import { ComponentType, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
-// Ràng buộc T để nó hợp lệ với React component props
-function withLogger<T extends JSX.IntrinsicAttributes>(
-  WrappedComponent: ComponentType<T>
-) {
-  const ComponentWithLogger = (props: T) => {
+const withLogger = (WrappedComponent: React.ComponentType<any>) => {
+  const WithLoggerComponent = (props: any) => {
+    const isFirstRender = useRef(true);
+    const previousProps = useRef<any>({});
+
     useEffect(() => {
       console.log("Component mounted with props:", props);
 
       return () => {
         console.log("Component unmounted");
       };
-    }, [props]); // Thêm props vào mảng phụ thuộc
+    }, []);
+
+    useEffect(() => {
+      if (!isFirstRender.current) {
+        console.log("Component updated");
+        if (JSON.stringify(previousProps.current) !== JSON.stringify(props)) {
+          console.log("Props changed:", {
+            previous: previousProps.current,
+            current: props,
+          });
+        }
+      } else {
+        isFirstRender.current = false;
+      }
+      previousProps.current = props;
+    });
 
     return <WrappedComponent {...props} />;
   };
 
-  return ComponentWithLogger;
-}
+  return WithLoggerComponent;
+};
 
 export default withLogger;

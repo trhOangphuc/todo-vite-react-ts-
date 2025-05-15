@@ -2,7 +2,8 @@ import { TodoProvider } from "./context/TodoContext";
 import TodoPage from "./pages/TodoPage";
 import './App.css'
 import TodoDetail from "./pages/TodoDetail";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import TodoAPI from "./pages/TodoAPI";
 
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<TodoPage />} />
         <Route path="/todo/:id" element={<TodoDetail />} />
+        <Route path="/API" element={<TodoAPI />} />
       </Routes>
     </TodoProvider>
   );

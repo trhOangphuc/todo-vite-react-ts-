@@ -5,6 +5,7 @@ import { useRef  } from "react";
 import { toast, ToastContainer } from "react-toastify"; // Import thư viện để hiển thị thông báo
 import "react-toastify/dist/ReactToastify.css"; // Import CSS cho Toastify
 import withLogger from "../hoc/withLogger";
+import { Link } from "react-router-dom";
 
   const TodoPage = () => {
     const { value, onChange, reset } = useInput("");
@@ -12,9 +13,8 @@ import withLogger from "../hoc/withLogger";
     const [itemCount, setItemCount] = useState<number>(0); // State để lưu số lượng item
     const [checkedStatus, setCheckedStatus] =useState<boolean[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
-
     const CompletedCount = checkedStatus.filter((checked) => checked).length // Số task hoàn thành
-    
+
   // Lấy dữ liệu từ localStorage khi trang được mở lại
   useEffect(() => {
     try {
@@ -105,6 +105,11 @@ import withLogger from "../hoc/withLogger";
   return (
   
     <div className="page">
+      <div className="dataAPI">
+        <Link to={'API'}>
+          data API
+        </Link>
+      </div>
       <h1>Todo List</h1>
       <input
         ref={inputRef}

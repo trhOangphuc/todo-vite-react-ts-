@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #b8ece4;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,14 +20,13 @@ a {
   text-decoration: inherit;
 }
 
-html, body {
-  height: 100%;
-}
 
 body {
   margin: 0;
   display: flex;
   place-items: center;
+  justify-content: center; /* căn giữa ngang */
+  align-items: center;    /* căn giữa dọc */
   background-color: #b8ece4;
 }
 
